@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TxQRNative</string>
+    <string name="make_qr">make QR GIF(Sample)</string>
 </resources>
