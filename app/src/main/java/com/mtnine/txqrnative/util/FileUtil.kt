@@ -6,10 +6,7 @@ import android.media.MediaScannerConnection
 import android.os.Environment
 import android.util.Log
 import com.mtnine.txqrnative.util.QRGenerator.Companion.LOG_TAG
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import java.util.*
 
 object FileUtil {
@@ -112,4 +109,32 @@ object FileUtil {
         return ""
     }
 
+    fun saveText(text: String, context: Context) {
+        val dir = File(
+            Environment
+                .getExternalStorageDirectory()
+                .toString() + IMAGE_DIRECTORY
+        )
+
+        if (!dir.exists()) {
+            Log.d(LOG_TAG, "" + dir.mkdirs())
+            dir.mkdirs()
+        }
+
+        try {
+            val file = File(dir, Calendar.getInstance().timeInMillis.toString() + ".txt")
+            file.createNewFile()
+            val fileOutputStream = FileOutputStream(file)
+            fileOutputStream.write(text.toByteArray())
+            MediaScannerConnection.scanFile(
+                context,
+                arrayOf(file.path),
+                arrayOf("text/plain"), null
+            )
+            fileOutputStream.close()
+            Log.d(LOG_TAG, "File Saved :: ->>>>" + file.absolutePath)
+        } catch (e : IOException) {
+            Log.e(LOG_TAG, "File write failed: $e")
+        }
+    }
 }

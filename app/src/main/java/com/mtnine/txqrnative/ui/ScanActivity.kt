@@ -76,7 +76,7 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             messageToBeam = String(beamedMessage!!)
             Log.d(LOG_TAG, messageToBeam)
 
-//            FileUtil.saveText(messageToBeam)
+            FileUtil.saveText(messageToBeam, this)
             finish()
         }
     }
