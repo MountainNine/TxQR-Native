@@ -2,18 +2,9 @@ package com.mtnine.txqrnative.util
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.media.MediaScannerConnection
-import android.os.Environment
-import android.util.Log
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
-import com.mtnine.txqrnative.vm.MainViewModel
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.*
 
 class QRGenerator(messageData: String, context: Context) {
     private lateinit var bitmap: Bitmap
@@ -21,7 +12,7 @@ class QRGenerator(messageData: String, context: Context) {
 
     init {
         bitmap = textToImageEncode(messageData)!!
-        path = ImageUtil.saveImage(bitmap, context)
+        path = FileUtil.saveImage(bitmap, context)
     }
 
     fun getPath(): String {
@@ -75,5 +66,6 @@ class QRGenerator(messageData: String, context: Context) {
 
         //Code Resolution
         const val QRCodeWidth = 968
+        const val LOG_TAG = "TAG"
     }
 }

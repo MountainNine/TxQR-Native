@@ -4,20 +4,26 @@ import android.util.Log
 import com.mtnine.txqrnative.base.BaseViewModel
 import com.mtnine.txqrnative.base.MutableSingleLiveData
 import com.mtnine.txqrnative.util.EncodeUtil
+import com.mtnine.txqrnative.util.QRGenerator.Companion.LOG_TAG
 import java.io.*
 
 class MainViewModel : BaseViewModel() {
     var onMakeQRClick = MutableSingleLiveData<Unit>()
+    var onGoScanQRClick = MutableSingleLiveData<Unit>()
 
     fun clickMakeQR() {
         onMakeQRClick.setValue(Unit)
     }
 
+    fun clickGoScanQR() {
+        onGoScanQRClick.setValue(Unit)
+    }
+
     fun splitAndEncode(input: InputStream) : List<ByteArray> {
-        Log.d("TAG", "started making codes")
+        Log.d(LOG_TAG, "started making codes")
         val msgToEncode = readTextFromFile(input)
         val blocks = encode(msgToEncode.toByteArray(), 256, 5)
-        Log.d("TAG", "data encoded")
+        Log.d(LOG_TAG, "data encoded")
         return blocks
     }
 

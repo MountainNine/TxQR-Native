@@ -5,13 +5,14 @@ import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.os.Environment
 import android.util.Log
+import com.mtnine.txqrnative.util.QRGenerator.Companion.LOG_TAG
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
-object ImageUtil {
+object FileUtil {
     const val IMAGE_DIRECTORY = "/QRCodeDocuments"
 
     fun generateGif(bitmaps: List<Bitmap>): ByteArray {
@@ -36,7 +37,7 @@ object ImageUtil {
         // have the object build the directory structure, if needed.
 
         if (!wallpaperDirectory.exists()) {
-            Log.d("TAG", "" + wallpaperDirectory.mkdirs())
+            Log.d(LOG_TAG, "" + wallpaperDirectory.mkdirs())
             wallpaperDirectory.mkdirs()
         }
 
@@ -50,7 +51,7 @@ object ImageUtil {
                 arrayOf(file.path),
                 arrayOf("image/gif"), null)
             fileOutputStream.close()
-            Log.d("TAG", "File Saved :: ->>>>" + file.absolutePath)
+            Log.d(LOG_TAG, "File Saved :: ->>>>" + file.absolutePath)
 
             deleteTemp()
             return file.absolutePath
@@ -84,7 +85,7 @@ object ImageUtil {
         // have the object build the directory structure, if needed.
 
         if (!wallpaperDirectory.exists()) {
-            Log.d("TAG", "" + wallpaperDirectory.mkdirs())
+            Log.d(LOG_TAG, "" + wallpaperDirectory.mkdirs())
             wallpaperDirectory.mkdirs()
         }
 
@@ -102,11 +103,11 @@ object ImageUtil {
                 arrayOf("image/jpeg"), null
             )
             fileOutputStream.close()
-            Log.d("TAG", "File Saved :: ->>>>" + file.absolutePath)
+            Log.d(LOG_TAG, "File Saved :: ->>>>" + file.absolutePath)
 
             return file.absolutePath
         } catch (e1: IOException) {
-            Log.d("TAG", "ioexception while saving")
+            Log.d(LOG_TAG, "ioexception while saving")
         }
         return ""
     }
