@@ -71,24 +71,24 @@ object FileUtil {
 
     }
 
-    fun saveImage(bitmap: Bitmap?, context: Context): String {
+    fun saveQRImage(bitmap: Bitmap?, context: Context): String {
         val bytes = ByteArrayOutputStream()
         bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val wallpaperDirectory = File(
+        val dir = File(
             Environment
                 .getExternalStorageDirectory()
                 .toString() + IMAGE_DIRECTORY + "/Temp"
         )
         // have the object build the directory structure, if needed.
 
-        if (!wallpaperDirectory.exists()) {
-            Log.d(LOG_TAG, "" + wallpaperDirectory.mkdirs())
-            wallpaperDirectory.mkdirs()
+        if (!dir.exists()) {
+            Log.d(LOG_TAG, "" + dir.mkdirs())
+            dir.mkdirs()
         }
 
         try {
             val file = File(
-                wallpaperDirectory, Calendar.getInstance()
+                dir, Calendar.getInstance()
                     .timeInMillis.toString() + ".jpg"
             )
             file.createNewFile() //give read write permission

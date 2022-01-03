@@ -6,8 +6,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.Result
-import com.mtnine.txqrnative.R
-import com.mtnine.txqrnative.base.BaseActivity
 import com.mtnine.txqrnative.util.EncodeUtil
 import com.mtnine.txqrnative.util.FileUtil
 import com.mtnine.txqrnative.util.PermissionUtil

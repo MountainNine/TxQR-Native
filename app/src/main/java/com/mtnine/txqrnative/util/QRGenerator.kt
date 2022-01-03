@@ -12,7 +12,7 @@ class QRGenerator(messageData: String, context: Context) {
 
     init {
         bitmap = textToImageEncode(messageData)!!
-        path = FileUtil.saveImage(bitmap, context)
+        path = FileUtil.saveQRImage(bitmap, context)
     }
 
     fun getPath(): String {
