@@ -1,6 +1,7 @@
 package com.mtnine.txqrnative.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -9,7 +10,6 @@ import com.google.zxing.Result
 import com.mtnine.txqrnative.util.EncodeUtil
 import com.mtnine.txqrnative.util.FileUtil
 import com.mtnine.txqrnative.util.PermissionUtil
-import com.mtnine.txqrnative.util.PermissionUtil.requestCameraAccessIfNecessary
 import com.mtnine.txqrnative.util.QRGenerator.Companion.LOG_TAG
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 
@@ -37,7 +37,7 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         super.onResume()
         scannerView.setResultHandler(this)
         // start camera immediately if permission is already given
-        if (!requestCameraAccessIfNecessary(this)) {
+        if (!PermissionUtil.requestCameraAccessIfNecessary(this)) {
             scannerView.startCamera()
         }
     }
@@ -74,7 +74,11 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             messageToBeam = String(beamedMessage!!)
             Log.d(LOG_TAG, messageToBeam)
 
-            FileUtil.saveText(messageToBeam, this)
+            if (Build.VERSION.SDK_INT >= 29) {
+                FileUtil.saveTextNew(messageToBeam, this)
+            } else {
+                FileUtil.saveText(messageToBeam, this)
+            }
             finish()
         }
     }

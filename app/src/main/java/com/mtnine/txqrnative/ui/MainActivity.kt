@@ -2,6 +2,7 @@ package com.mtnine.txqrnative.ui
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
@@ -26,7 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
 
         viewModel.onMakeQRClick.observe(this, {
             if (!PermissionUtil.requestStorageAccessIfNecessary(this)) {
-                val blocks = viewModel.splitAndEncode(assets.open("sample.txt"))
+                val blocks = viewModel.splitAndEncode(assets.open("sample2.txt"))
                 val bitmaps = mutableListOf<Bitmap>()
                 blocks.forEach { block ->
                     Log.d(LOG_TAG, "encoding images")
@@ -37,7 +38,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
                     }
                 }
                 Log.d(LOG_TAG, "saving")
-                FileUtil.saveGif(generateGif(bitmaps), this)
+                if (Build.VERSION.SDK_INT >= 29) {
+                    FileUtil.saveGifNew(generateGif(bitmaps), this)
+                } else {
+                    FileUtil.saveGifOld(generateGif(bitmaps), this)
+                }
             }
         })
 
@@ -45,6 +50,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
             val intent = Intent(this, ScanActivity::class.java)
             startActivity(intent)
         })
+    }
+
+    override fun onResume() {
+        PermissionUtil.requestStorageAccessIfNecessary(this)
+        super.onResume()
     }
 
 
