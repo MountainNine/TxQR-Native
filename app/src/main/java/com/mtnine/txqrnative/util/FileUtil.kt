@@ -2,6 +2,7 @@ package com.mtnine.txqrnative.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.os.Environment
 import android.util.Log
@@ -69,6 +70,36 @@ object FileUtil {
             dir.delete()
         }
 
+    }
+
+    fun saveImage(byteStr : String, context: Context) {
+        try {
+            val encodedByte = byteStr.toByteArray()
+            val dir = File(Environment
+                .getExternalStorageDirectory()
+                .toString() + IMAGE_DIRECTORY)
+            if (!dir.exists()) {
+                Log.d(LOG_TAG, "" + dir.mkdirs())
+                dir.mkdirs()
+            }
+
+                val file = File(
+                    dir, Calendar.getInstance()
+                        .timeInMillis.toString() + ".png"
+                )
+                file.createNewFile() //give read write permission
+                val fileOutputStream = FileOutputStream(file)
+                fileOutputStream.write(encodedByte)
+                MediaScannerConnection.scanFile(
+                    context,
+                    arrayOf(file.path),
+                    arrayOf("image/png"), null
+                )
+                fileOutputStream.close()
+                Log.d(LOG_TAG, "File Saved :: ->>>>" + file.absolutePath)
+        } catch (e1: IOException) {
+            Log.d(LOG_TAG, "ioexception while saving")
+        }
     }
 
     fun saveQRImage(bitmap: Bitmap?, context: Context): String {
