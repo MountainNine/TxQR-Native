@@ -21,50 +21,14 @@ class QRGenerator(messageData: String, context: Context) {
 
     init {
         bitmap = textToImageEncode(messageData)!!
-        path = saveImage(bitmap, context)
+        path = ImageUtil.saveImage(bitmap, context)
     }
 
     fun getPath(): String {
         return path
     }
 
-    private fun saveImage(bitmap: Bitmap?, context: Context): String {
-        val bytes = ByteArrayOutputStream()
-        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val wallpaperDirectory = File(
-            Environment
-                .getExternalStorageDirectory()
-                .toString() + IMAGE_DIRECTORY
-        )
-        // have the object build the directory structure, if needed.
 
-        if (!wallpaperDirectory.exists()) {
-            Log.d("TAG", "" + wallpaperDirectory.mkdirs())
-            wallpaperDirectory.mkdirs()
-        }
-
-        try {
-            val file = File(
-                wallpaperDirectory, Calendar.getInstance()
-                    .timeInMillis.toString() + ".jpg"
-            )
-            file.createNewFile() //give read write permission
-            val fileOutputStream = FileOutputStream(file)
-            fileOutputStream.write(bytes.toByteArray())
-            MediaScannerConnection.scanFile(
-                context,
-                arrayOf(file.path),
-                arrayOf("image/jpeg"), null
-            )
-            fileOutputStream.close()
-            Log.d("TAG", "File Saved :: ->>>>" + file.absolutePath)
-
-            return file.absolutePath
-        } catch (e1: IOException) {
-            Log.d("TAG", "ioexception while saving")
-        }
-        return ""
-    }
 
     fun textToImageEncode(messageData: String): Bitmap? {
         val bitMatrix: BitMatrix
@@ -111,6 +75,5 @@ class QRGenerator(messageData: String, context: Context) {
 
         //Code Resolution
         const val QRCodeWidth = 968
-        const val IMAGE_DIRECTORY = "/QRCodeDocuments"
     }
 }
