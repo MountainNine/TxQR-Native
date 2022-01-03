@@ -39,7 +39,7 @@ class QRGenerator(messageData: String, context: Context) {
         // have the object build the directory structure, if needed.
 
         if (!wallpaperDirectory.exists()) {
-            Log.d("imagesDirectory", "" + wallpaperDirectory.mkdirs())
+            Log.d("TAG", "" + wallpaperDirectory.mkdirs())
             wallpaperDirectory.mkdirs()
         }
 
@@ -57,11 +57,11 @@ class QRGenerator(messageData: String, context: Context) {
                 arrayOf("image/jpeg"), null
             )
             fileOutputStream.close()
-            Log.d("file done", "File Saved :: ->>>>" + file.absolutePath)
+            Log.d("TAG", "File Saved :: ->>>>" + file.absolutePath)
 
             return file.absolutePath
         } catch (e1: IOException) {
-            Log.d("hmmm", "ioexception while saving")
+            Log.d("TAG", "ioexception while saving")
         }
         return ""
     }
@@ -102,6 +102,7 @@ class QRGenerator(messageData: String, context: Context) {
         )
         return bitmap
     }
+
     
     companion object {
         const val BLACK: Int = 2130968606
@@ -110,6 +111,6 @@ class QRGenerator(messageData: String, context: Context) {
 
         //Code Resolution
         const val QRCodeWidth = 968
-        private const val IMAGE_DIRECTORY = "/QRCodeDocuments"
+        const val IMAGE_DIRECTORY = "/QRCodeDocuments"
     }
 }

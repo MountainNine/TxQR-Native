@@ -12,7 +12,7 @@ import kotlin.experimental.xor
 import kotlin.math.*
 
 object EncodeUtil {
-    fun genTau(s: Double, k: Int, delta: Double): MutableList<Double> {
+    private fun genTau(s: Double, k: Int, delta: Double): MutableList<Double> {
 
         val pivot = floor(k / s).toInt()
         val distribution = mutableListOf<Double>()
@@ -30,7 +30,7 @@ object EncodeUtil {
         return distribution
     }
 
-    fun genRho(k: Int): MutableList<Double> {
+    private fun genRho(k: Int): MutableList<Double> {
         val distribution = mutableListOf<Double>()
 
         distribution.add(1 / k.toDouble())
@@ -42,7 +42,7 @@ object EncodeUtil {
         return distribution
     }
 
-    fun genMu(k: Int, delta: Double, c: Double): MutableList<Double> {
+    private fun genMu(k: Int, delta: Double, c: Double): MutableList<Double> {
         val s = c * log(k.toDouble() / delta, E) * sqrt(k.toDouble())
 
         val tau = genTau(s, k, delta)
@@ -58,7 +58,7 @@ object EncodeUtil {
         return distribution
     }
 
-    fun genRsdCdf(k: Int, delta: Double, c: Double): MutableList<Double> {
+    private fun genRsdCdf(k: Int, delta: Double, c: Double): MutableList<Double> {
         val mu = genMu(k, delta, c)
         val distribution = mutableListOf<Double>()
 
@@ -129,7 +129,7 @@ object EncodeUtil {
         }
     }
 
-    fun xorByteArray(a: ByteArray, b: ByteArray): ByteArray? {
+    private fun xorByteArray(a: ByteArray, b: ByteArray): ByteArray? {
         if (a.size == b.size) {
             return ByteArray(a.size) { index -> a[index] xor b[index] }
         }
@@ -137,13 +137,13 @@ object EncodeUtil {
     }
 
 
-    fun split_file(data: ByteArray, blocksize: Int): MutableList<ByteArray> {
+    private fun split_file(data: ByteArray, blocksize: Int): MutableList<ByteArray> {
         return data.toList().chunked(blocksize).map {
             Arrays.copyOf(it.toByteArray(), blocksize)
         }.toMutableList()
     }
 
-    fun compressBytes(data: ByteArray): ByteArray {
+    private fun compressBytes(data: ByteArray): ByteArray {
         val compressor = Deflater()
 
         compressor.setInput(data)
@@ -161,7 +161,7 @@ object EncodeUtil {
         return result.toByteArray()
     }
 
-    fun decompressBytes(data: ByteArray): ByteArray {
+    private fun decompressBytes(data: ByteArray): ByteArray {
         val decompressor = Inflater()
         decompressor.setInput(data)
 
@@ -176,7 +176,7 @@ object EncodeUtil {
         return result.toByteArray()
     }
 
-    fun encoder(file: ByteArray, blockSize: Int, extra: Int): List<ByteArray> {
+    public fun encode(file: ByteArray, blockSize: Int, extra: Int): List<ByteArray> {
         val seed = (0 until 1.shl(30)).random()
 
         val processed: ByteArray
