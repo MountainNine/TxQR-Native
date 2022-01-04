@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import com.google.zxing.integration.android.IntentIntegrator
 import com.mtnine.txqrnative.R
 import com.mtnine.txqrnative.base.BaseActivity
 import com.mtnine.txqrnative.databinding.ActivityMainBinding
@@ -47,9 +48,26 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
         })
 
         viewModel.onGoScanQRClick.observe(this, {
-            val intent = Intent(this, ScanActivity::class.java)
-            startActivity(intent)
+            /*val intent = Intent(this, ScanActivity::class.java)
+            startActivity(intent)*/
+            val qrScan = IntentIntegrator(this)
+            qrScan.setOrientationLocked(true)
+            qrScan.setPrompt("QR코드를 인식해주세요.")
+            qrScan.setBeepEnabled(false)
+            qrScan.initiateScan()
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if(result != null) {
+            if (result.contents == null) {
+                showToast("Cancelled")
+            } else {
+                showToast("Scanned: " + result.contents)
+            }
+        }
     }
 
     override fun onResume() {
