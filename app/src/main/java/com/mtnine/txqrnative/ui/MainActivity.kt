@@ -48,13 +48,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
         })
 
         viewModel.onGoScanQRClick.observe(this, {
-            /*val intent = Intent(this, ScanActivity::class.java)
-            startActivity(intent)*/
-            val qrScan = IntentIntegrator(this)
-            qrScan.setOrientationLocked(true)
-            qrScan.setPrompt("QR코드를 인식해주세요.")
-            qrScan.setBeepEnabled(false)
-            qrScan.initiateScan()
+            val intent = Intent(this, ScanActivity::class.java)
+            startActivity(intent)
         })
     }
 
