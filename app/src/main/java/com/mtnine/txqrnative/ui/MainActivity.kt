@@ -28,7 +28,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
 
         viewModel.onMakeQRClick.observe(this, {
             if (!PermissionUtil.requestStorageAccessIfNecessary(this)) {
-                val blocks = viewModel.splitAndEncode(assets.open("sample2.txt"))
+                val blocks = viewModel.splitAndEncode(assets.open("sample.txt"))
                 val bitmaps = mutableListOf<Bitmap>()
                 blocks.forEach { block ->
                     Log.d(LOG_TAG, "encoding images")
