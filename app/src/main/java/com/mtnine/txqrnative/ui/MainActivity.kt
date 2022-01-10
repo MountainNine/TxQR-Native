@@ -2,9 +2,11 @@ package com.mtnine.txqrnative.ui
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import com.google.zxing.integration.android.IntentIntegrator
 import com.mtnine.txqrnative.R
 import com.mtnine.txqrnative.base.BaseActivity
 import com.mtnine.txqrnative.databinding.ActivityMainBinding
@@ -37,7 +39,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
                     }
                 }
                 Log.d(LOG_TAG, "saving")
-                FileUtil.saveGif(generateGif(bitmaps), this)
+                if (Build.VERSION.SDK_INT >= 29) {
+                    FileUtil.saveGifNew(generateGif(bitmaps), this)
+                } else {
+                    FileUtil.saveGifOld(generateGif(bitmaps), this)
+                }
             }
         })
 
@@ -45,6 +51,23 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.a
             val intent = Intent(this, ScanActivity::class.java)
             startActivity(intent)
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if(result != null) {
+            if (result.contents == null) {
+                showToast("Cancelled")
+            } else {
+                showToast("Scanned: " + result.contents)
+            }
+        }
+    }
+
+    override fun onResume() {
+        PermissionUtil.requestStorageAccessIfNecessary(this)
+        super.onResume()
     }
 
 
